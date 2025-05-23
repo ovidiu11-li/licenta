@@ -7,14 +7,12 @@ Platformă web pentru gestionarea lucrărilor de licență/disertație, cu rolur
   - Upload și previzualizare lucrare PDF
   - Vizualizare feedback primit (notă și mesaj de la profesor)
   - Mesagerie cu profesorul (thread, cu atașamente PDF opționale)
-  - Notificări pentru mesaje necitite
 - **Profesor:**
   - Vizualizare lucrări studenți asociați
   - Acordare feedback (notă și mesaj) pentru fiecare lucrare
   - Editare/ștergere feedback
   - Ștergere lucrări studenți
   - Mesagerie cu studenții
-  - Notificări pentru mesaje necitite
 - **Administrator:**
   - Management utilizatori (creare, editare, ștergere profesori/studenți)
   - Management lucrări (vizualizare, redenumire, ștergere)
@@ -23,8 +21,8 @@ Platformă web pentru gestionarea lucrărilor de licență/disertație, cu rolur
 ## Tehnologii folosite
 - **Backend:** Laravel 10+
 - **Frontend:** Blade, Tailwind CSS, Material Icons, Alpine.js
-- **DB:** MySQL/MariaDB
-- **Altele:** Composer, npm, Vite, Docker/Sail (opțional)
+- **DB:** MySQL
+- **Altele:** Composer, npm, Vite, Docker/Sail
 
 ## Instalare și rulare
 
@@ -46,11 +44,6 @@ npm install
   cp .env.example .env
   ```
 - Setează datele de conectare la baza de date în `.env`:
-  ```env
-  DB_DATABASE=licenta
-  DB_USERNAME=utilizator
-  DB_PASSWORD=parola
-  ```
 
 ### 4. Generează cheia aplicației
 ```bash
@@ -81,11 +74,6 @@ php artisan serve
 ```bash
 ./vendor/bin/sail up
 ```
-
-## Alte note
-- Pentru funcționalitatea de upload/descărcare PDF, asigură-te că folderul `storage/` are permisiuni de scriere.
-- Dacă muți proiectul, copiază și fișierele din `storage/app/private` pentru a păstra lucrările încărcate.
-- Pentru notificări live, aplicația folosește AJAX polling (nu WebSockets).
 
 ## Structură foldere relevante
 - `app/Http/Controllers/` - logica pentru dashboard-uri, mesagerie, feedback etc.
