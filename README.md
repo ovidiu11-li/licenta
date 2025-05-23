@@ -1,8 +1,6 @@
-# Platformă Licență - Laravel
-
 ## Descriere
 
-Aceasta este o platformă web pentru gestionarea lucrărilor de licență/disertație, cu roluri pentru student, profesor și administrator. Include funcționalități de upload PDF, mesagerie, feedback, management utilizatori și lucrări, notificări și dashboard-uri dedicate.
+Platformă web pentru gestionarea lucrărilor de licență/disertație, cu roluri pentru student, profesor și administrator. Include funcționalități de upload PDF, mesagerie, feedback, management utilizatori și lucrări, notificări și dashboard-uri dedicate.
 
 ## Funcționalități principale
 - **Student:**
@@ -94,13 +92,3 @@ php artisan serve
 - `resources/views/` - Blade views pentru fiecare rol și funcționalitate
 - `routes/web.php` - rutele aplicației
 - `database/migrations/` - structura tabelelor (users, pdfs, messages, feedback etc.)
-
-## Utilizatori demo (exemplu)
-- admin@demo.com / parola
-- profesor@demo.com / parola
-- student@demo.com / parola
-
-> **Atenție:** Schimbă parolele și utilizatorii demo înainte de producție!
-
-## Licență
-Acest proiect este open-source, bazat pe Laravel, sub licență MIT.
