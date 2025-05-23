@@ -10,22 +10,20 @@ use App\Http\Controllers\TeacherMessageController;
 use App\Http\Controllers\TeacherPdfController;
 
 Route::get('/', function () {
-    // Redirect to dashboard if user is logged in
-        if (Auth::check()) {
-    return redirect('/dashboard');
-}
-
-
-    // Otherwise show login form
+    if (Auth::check()) {
+        $user = Auth::user();
+        switch ($user->role) {
+            case 'admin':
+                return redirect('/admin/dashboard');
+            case 'teacher':
+                return redirect('/teacher/dashboard');
+            case 'student':
+            default:
+                return redirect('/student/dashboard');
+        }
+    }
     return view('auth.login');
 });
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-// Rute catre dashboard respectiv
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', function () {

@@ -53,7 +53,7 @@
                                 @php
                                     $feedback = \App\Models\Feedback::where('pdf_id', $pdf->id)->where('teacher_id', auth()->id())->first();
                                 @endphp
-                                <a href="{{ route('teacher.feedback.form', $pdf->id) }}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs ml-2">
+                                <a href="{{ route('teacher.feedback.form', $pdf->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
                                     {{ $feedback ? 'Editare feedback' : 'Acordă feedback' }}
                                 </a>
                                 <form action="{{ route('teacher.pdfs.delete', $pdf->id) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Sigur vrei să ștergi această lucrare?');">

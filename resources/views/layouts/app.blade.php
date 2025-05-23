@@ -22,12 +22,12 @@
 
 
             <header class="bg-white border-b border-black-200 px-6 py-10 relative flex items-center justify-center">
-    <!-- Text centrat absolut -->
+    <!-- text centrat absolut -->
     <h1 class="text-xl font-semibold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
         Platformă Licență
     </h1>
 
-    <!-- Butoane în dreapta -->
+    <!-- iconita de user dreapta -->
     <div class="absolute right-6 flex items-center gap-4">
         @auth
         <div x-data="{ open: false }" class="relative">
@@ -55,7 +55,7 @@
 
    
 
-            <!-- Page Content -->
+
             <main>
                 @yield('content')
             </main>
