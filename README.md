@@ -82,6 +82,6 @@ php artisan serve
 - `database/migrations/` - structura tabelelor (users, pdfs, messages, feedback etc.)
 
 ## Conturi folosite pentru testare pana cand realizez autentificare proprie
--`Admin` - admin@test.com password
--`Profesor` - teacher@test.com password
--`Student` - student@test.com password
+- `Admin` - admin@test.com password
+- `Profesor` - teacher@test.com password
+- `Student` - student@test.com password
