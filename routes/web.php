@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminPdfController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\StudentMessageController;
 use App\Http\Controllers\TeacherMessageController;
+use App\Http\Controllers\TeacherPdfController;
 
 Route::get('/', function () {
     // Redirect to dashboard if user is logged in
@@ -67,6 +68,7 @@ Route::post('/student/messages', [StudentMessageController::class, 'store'])->na
 
 Route::get('/teacher/messages', [TeacherMessageController::class, 'index'])->name('teacher.messages');
 Route::post('/teacher/messages', [TeacherMessageController::class, 'store'])->name('teacher.messages.send');
+Route::delete('/teacher/pdfs/{pdf}', [TeacherPdfController::class, 'destroy'])->name('teacher.pdfs.delete');
 
 Route::middleware(['auth'])->group(function () {
     // ...
