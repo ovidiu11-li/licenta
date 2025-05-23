@@ -34,7 +34,7 @@
             <form method="POST" action="{{ route('admin.students.create') }}" class="mb-8 flex gap-4 items-end">
                 @csrf
                 <div>
-                    <label class="block text-xs text-gray-500 mb-1">Nume</label>
+                    <label class="block text-xs text-gray-500 mb-1">Numele studentului</label>
                     <input type="text" name="name" class="border rounded px-2 py-1 text-sm w-full" required />
                 </div>
                 <div>
