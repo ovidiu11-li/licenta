@@ -80,3 +80,8 @@ php artisan serve
 - `resources/views/` - Blade views pentru fiecare rol și funcționalitate
 - `routes/web.php` - rutele aplicației
 - `database/migrations/` - structura tabelelor (users, pdfs, messages, feedback etc.)
+
+## Conturi folosite pentru testare pana cand realizez autentificare proprie
+- `Admin` - admin@test.com password
+- `Profesor` - teacher@test.com password
+- `Student` - student@test.com password
