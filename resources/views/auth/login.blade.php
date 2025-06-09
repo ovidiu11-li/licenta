@@ -57,7 +57,13 @@
             <div class="text-left text-sm">
                 Nu ai cont? <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Înregistrare</a>
             </div>
-            </div>
+
+            {{-- Show custom error if authentication fails --}}
+            @if ($errors->has('email'))
+                <div class="text-red-500 text-sm mt-2">
+                    Contul nu există sau datele sunt greșite.
+                </div>
+            @endif
         </form>
     </div>
 </div>
