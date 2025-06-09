@@ -17,8 +17,7 @@
                           d="M13 16h-1v-4h-1m1-4h.01M21 12A9 9 0 113 12a9 9 0 0118 0z" />
                 </svg>
                 <span>
-                    Contul poate fi creat doar pe baza înregistrării adresei de e-mail în prealabil în sistem.
-                    Utilizează adresa de e-mail înrolată în sistem.
+                    Înregistrarea este permisă doar pentru studenții UAB cu adrese de e-mail de forma: <strong>nume.complet.infoXX@uab.ro</strong> (unde XX este un număr)
                 </span>
             </div>
 
@@ -28,31 +27,37 @@
 
                 {{-- Name --}}
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Utilizator</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nume complet</label>
                     <input id="name" type="text" name="name" required
-                        class="mt-1 block w-full rounded border-gray-300 shadow-sm"
-                        placeholder="Utilizator sau e-mail">
-                    <span class="text-red-500 text-sm mt-1 hidden" id="name-error">Acest câmp este obligatoriu</span>
+                        class="mt-1 block w-full rounded border-gray-300 shadow-sm @error('name') border-red-500 @enderror"
+                        placeholder="Nume complet"
+                        value="{{ old('name') }}">
+                    @error('name')
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
-
 
                 {{-- Email --}}
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700">E-mail UAB</label>
                     <input id="email" type="email" name="email" required
-                        class="mt-1 block w-full rounded border-gray-300 shadow-sm"
-                        placeholder="E-mail">
-                    <span class="text-red-500 text-sm mt-1 hidden" id="email-error">Acest câmp este obligatoriu</span>
+                        class="mt-1 block w-full rounded border-gray-300 shadow-sm @error('email') border-red-500 @enderror"
+                        placeholder="nume.complet.infoXX@uab.ro"
+                        value="{{ old('email') }}">
+                    @error('email')
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
-
 
                 {{-- Password --}}
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-700">Parolă</label>
                     <input id="password" type="password" name="password" required
-                           class="mt-1 block w-full rounded border-gray-300 shadow-sm"
+                           class="mt-1 block w-full rounded border-gray-300 shadow-sm @error('password') border-red-500 @enderror"
                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-                    <span class="text-red-500 text-sm mt-1 hidden" id="password-error">Acest câmp este obligatoriu</span>
+                    @error('password')
+                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Confirm Password --}}
@@ -60,9 +65,7 @@
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirmare parolă</label>
                     <input id="password_confirmation" type="password" name="password_confirmation" required
                            class="mt-1 block w-full rounded border-gray-300 shadow-sm"
-                                    
                            placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
-                    <span class="text-red-500 text-sm mt-1 hidden" id="password_confirmation-error">Acest câmp este obligatoriu</span>       
                 </div>
 
                 {{-- Submit --}}
