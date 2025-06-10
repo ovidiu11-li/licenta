@@ -11,6 +11,7 @@ class StudentController extends Controller
 {
     public function uploadPdf(Request $request)
     {
+        \Log::info('Upload PDF', ['user_id' => Auth::id()]);
         $request->validate([
             'pdf' => 'required|file|mimes:pdf|max:10240', // max 10MB
         ]);
@@ -18,11 +19,36 @@ class StudentController extends Controller
         $file = $request->file('pdf');
         $path = $file->store('pdfs', 'private');
 
-        Pdf::create([
-            'user_id' => Auth::id(),
-            'original_name' => $file->getClientOriginalName(),
-            'stored_name' => $path,
-        ]);
+        // Check if student already has a current PDF
+        $existingPdf = Pdf::where('user_id', Auth::id())
+            ->where('is_current', true)
+            ->first();
+
+        if ($existingPdf) {
+            // Mark existing PDF as not current
+            $existingPdf->update(['is_current' => false]);
+            
+            // Create new version
+            $newVersion = Pdf::create([
+                'user_id' => Auth::id(),
+                'original_name' => $file->getClientOriginalName(),
+                'stored_name' => $path,
+                'version' => $existingPdf->version + 1,
+                'parent_pdf_id' => $existingPdf->getRootPdf()->id,
+                'is_current' => true,
+            ]);
+            \Log::info('Created new PDF version', ['pdf_id' => $newVersion->id]);
+        } else {
+            // First PDF upload
+            $pdf = Pdf::create([
+                'user_id' => Auth::id(),
+                'original_name' => $file->getClientOriginalName(),
+                'stored_name' => $path,
+                'version' => 1,
+                'is_current' => true,
+            ]);
+            \Log::info('Created first PDF', ['pdf_id' => $pdf->id]);
+        }
 
         return redirect()->back()->with('success', 'PDF încărcat cu succes!');
     }
@@ -47,7 +73,13 @@ class StudentController extends Controller
         $teacher = Auth::user();
         $pdfs = \App\Models\Pdf::whereHas('user', function($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
-        })->with('user')->get();
+        })->with(['user', 'versions'])->get();
+        
+        // Group PDFs by their root PDF to show versions together
+        $groupedPdfs = $pdfs->groupBy(function($pdf) {
+            return $pdf->getRootPdf()->id;
+        });
+        
         $unreadCount = 0;
         if (auth()->user()->role === 'student') {
             $student = auth()->user();
@@ -60,7 +92,7 @@ class StudentController extends Controller
                     ->count();
             }
         }
-        return view('teacher.dashboard', compact('pdfs', 'unreadCount'));
+        return view('teacher.dashboard', compact('groupedPdfs', 'unreadCount'));
     }
 
     public function downloadMessagePdf($pdfPath)
@@ -76,6 +108,12 @@ class StudentController extends Controller
 
     public function studentDashboard()
     {
+        $student = Auth::user();
+        $pdfs = \App\Models\Pdf::where('user_id', $student->id)
+            ->orderByDesc('version')
+            ->orderByDesc('created_at')
+            ->get();
+
         $unreadCount = 0;
         if (auth()->user()->role === 'student') {
             $student = auth()->user();
@@ -88,7 +126,7 @@ class StudentController extends Controller
                     ->count();
             }
         }
-        return view('student.dashboard', compact('unreadCount'));
+        return view('student.dashboard', compact('pdfs', 'unreadCount'));
     }
 
     // arata formularul de feedback pentru un pdf (profesor)
@@ -143,5 +181,42 @@ class StudentController extends Controller
             ->orderByDesc('created_at')
             ->get();
         return view('teacher.feedbacks', compact('feedbacks'));
+    }
+
+    public function deletePdfVersion($pdfId)
+    {
+        $pdf = Pdf::findOrFail($pdfId);
+
+        // Only allow students to delete their own PDF versions
+        if ($pdf->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Dacă e root și are copii, nu permite ștergerea
+        if ($pdf->parent_pdf_id === null && $pdf->versions()->count() > 0) {
+            return redirect()->back()->withErrors('Nu poți șterge prima versiune dacă există versiuni ulterioare.');
+        }
+
+        // Dacă ștergi versiunea curentă, setează versiunea anterioară ca is_current
+        if ($pdf->is_current) {
+            $previous = Pdf::where('parent_pdf_id', $pdf->parent_pdf_id ?? $pdf->id)
+                ->where('id', '!=', $pdf->id)
+                ->orderByDesc('version')
+                ->first();
+            if (!$previous && $pdf->parent_pdf_id) {
+                // Dacă nu există altă versiune, root-ul devine curent
+                $previous = Pdf::find($pdf->parent_pdf_id);
+            }
+            if ($previous) {
+                $previous->update(['is_current' => true]);
+            }
+        }
+
+        // Delete the file from storage
+        Storage::disk('private')->delete($pdf->stored_name);
+        // Delete the database record
+        $pdf->delete();
+
+        return redirect()->back()->with('success', 'Versiunea PDF a fost ștearsă cu succes.');
     }
 } 

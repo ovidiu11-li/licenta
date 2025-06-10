@@ -28,7 +28,13 @@ class AdminPdfController extends Controller
 
     public function index()
     {
-        $pdfs = \App\Models\Pdf::with('user')->get();
-        return view('admin.works', compact('pdfs'));
+        $pdfs = \App\Models\Pdf::with(['user', 'versions'])->get();
+        
+        // Group PDFs by their root PDF to show versions together
+        $groupedPdfs = $pdfs->groupBy(function($pdf) {
+            return $pdf->getRootPdf()->id;
+        });
+        
+        return view('admin.works', compact('groupedPdfs'));
     }
 } 

@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::post('/student/upload', [StudentController::class, 'uploadPdf'])->name('student.upload');
+Route::delete('/student/pdf/{pdf}', [StudentController::class, 'deletePdfVersion'])->name('student.pdf.delete');
 Route::post('/admin/pdf/{pdf}/rename', [AdminPdfController::class, 'rename'])->name('admin.pdf.rename');
 Route::delete('/admin/pdf/{pdf}', [AdminPdfController::class, 'delete'])->name('admin.pdf.delete');
 Route::get('/pdfs/{pdf}', [StudentController::class, 'download'])->middleware('auth')->name('pdfs.download');

@@ -31,38 +31,80 @@
     <main class="flex-1 max-w-6xl mx-auto mt-10 p-6">
         <div class="bg-white p-8 rounded-xl shadow">
             <h1 class="text-2xl font-bold mb-6">Administrare lucrări</h1>
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nume lucrare</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Profesor</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Data încărcării</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Acțiuni</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($pdfs as $pdf)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2">{{ $pdf->original_name }}</td>
-                        <td class="px-4 py-2">{{ $pdf->user->name ?? '-' }}</td>
-                        <td class="px-4 py-2">{{ $pdf->user && $pdf->user->teacher ? $pdf->user->teacher->name : '-' }}</td>
-                        <td class="px-4 py-2">{{ $pdf->created_at->format('d.m.Y H:i') }}</td>
-                        <td class="px-4 py-2">
-                            <a href="{{ route('pdfs.view', $pdf->id) }}" target="_blank" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs mr-2">Vezi</a>
-                            <a href="{{ route('pdfs.download', $pdf->id) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs mr-2">Descarcă</a>
-                            <form method="POST" action="{{ route('admin.pdf.delete', $pdf->id) }}" class="inline" onsubmit="return confirm('Sigur vrei să ștergi această lucrare?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">Șterge</button>
-                            </form>
-                        </td>
-                    </tr>
+            
+            @if($groupedPdfs->count() > 0)
+                <div class="space-y-6">
+                    @foreach($groupedPdfs as $rootPdfId => $pdfs)
+                        @php
+                            $rootPdf = $pdfs->first()->getRootPdf();
+                            $student = $rootPdf->user;
+                            $allVersions = $rootPdf->allVersions();
+                        @endphp
+                        
+                        <div class="border border-gray-200 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{ $student->name }}</h3>
+                                    <p class="text-sm text-gray-600">{{ $student->email }}</p>
+                                    @if($student->teacher)
+                                        <p class="text-sm text-gray-500">Profesor: {{ $student->teacher->name }}</p>
+                                    @endif
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    {{ $allVersions->count() }} versiuni
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                @foreach($allVersions as $pdf)
+                                    <div class="border border-gray-200 rounded-lg p-4 {{ $pdf->is_current ? 'bg-blue-50 border-blue-200' : 'bg-gray-50' }}">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="material-icons text-red-500">picture_as_pdf</span>
+                                                <div>
+                                                    <div class="font-semibold text-gray-800">
+                                                        {{ $pdf->original_name }}
+                                                        @if($pdf->is_current)
+                                                            <span class="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Versiunea curentă</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="text-sm text-gray-600">
+                                                        Versiunea {{ $pdf->version }} • Încărcat {{ $pdf->created_at->format('d.m.Y H:i') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <a href="{{ route('pdfs.view', $pdf->id) }}" target="_blank" 
+                                                   class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                                                    Vezi
+                                                </a>
+                                                <a href="{{ route('pdfs.download', $pdf->id) }}" 
+                                                   class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
+                                                    Descarcă
+                                                </a>
+                                                <form method="POST" action="{{ route('admin.pdf.delete', $pdf->id) }}" 
+                                                      class="inline" 
+                                                      onsubmit="return confirm('Sigur vrei să ștergi această versiune?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+                                                        Șterge
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     @endforeach
-                </tbody>
-            </table>
-            @if($pdfs->count() === 0)
-                <div class="text-gray-400 text-center py-8">Nicio lucrare găsită.</div>
+                </div>
+            @else
+                <div class="text-gray-400 text-center py-8">
+                    <span class="material-icons text-4xl mb-2">folder_open</span>
+                    <p>Nicio lucrare găsită în sistem.</p>
+                </div>
             @endif
         </div>
     </main>
