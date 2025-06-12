@@ -40,15 +40,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/student/feedback', [App\Http\Controllers\StudentController::class, 'feedbackPage'])->name('student.feedback');
 
     Route::get('/teacher/feedbacks', [App\Http\Controllers\StudentController::class, 'teacherFeedbacksPage'])->name('teacher.feedbacks');
+
+    Route::get('/pdfs/{pdf}', [StudentController::class, 'download'])->name('pdfs.download');
+    Route::get('/pdfs/{pdf}/view', [StudentController::class, 'view'])->name('pdfs.view');
+    Route::get('/pdfs/message/{pdfPath}', [StudentController::class, 'downloadMessagePdf'])->name('pdfs.downloadMessagePdf');
+    Route::get('/pdfs/token/{token}', [StudentController::class, 'downloadByToken'])->name('pdfs.download.token');
+    Route::get('/pdfs/token/{token}/view', [StudentController::class, 'viewByToken'])->name('pdfs.view.token');
 });
 
 Route::post('/student/upload', [StudentController::class, 'uploadPdf'])->name('student.upload');
 Route::delete('/student/pdf/{pdf}', [StudentController::class, 'deletePdfVersion'])->name('student.pdf.delete');
 Route::post('/admin/pdf/{pdf}/rename', [AdminPdfController::class, 'rename'])->name('admin.pdf.rename');
 Route::delete('/admin/pdf/{pdf}', [AdminPdfController::class, 'delete'])->name('admin.pdf.delete');
-Route::get('/pdfs/{pdf}', [StudentController::class, 'download'])->middleware('auth')->name('pdfs.download');
-Route::get('/pdfs/{pdf}/view', [StudentController::class, 'view'])->middleware('auth')->name('pdfs.view');
-Route::get('/pdfs/message/{pdfPath}', [StudentController::class, 'downloadMessagePdf'])->middleware('auth')->name('pdfs.downloadMessagePdf');
 
 Route::get('/admin/teachers', [AdminUserController::class, 'teachers'])->name('admin.teachers');
 Route::get('/admin/students', [AdminUserController::class, 'students'])->name('admin.students');

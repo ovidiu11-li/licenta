@@ -31,7 +31,7 @@
                 <label for="email" class="block text-sm font-medium text-gray-700">Utilizator sau e-mail</label>
                 <input id="email" type="email" name="email" required
                        class="mt-1 block w-full rounded border-gray-300 shadow-sm"
-                       placeholder="Utilizator sau e-mail">
+                       placeholder="E-mail">
                 <span class="text-red-500 text-sm mt-1 hidden" id="email-error">Acest câmp este obligatoriu</span>
             </div>
 

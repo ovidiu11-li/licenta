@@ -92,11 +92,11 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('pdfs.view', $pdf->id) }}" target="_blank" 
+                                        <a href="{{ route('pdfs.view.token', $pdf->token) }}" target="_blank" 
                                            class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
                                             Vezi
                                         </a>
-                                        <a href="{{ route('pdfs.download', $pdf->id) }}" 
+                                        <a href="{{ route('pdfs.download.token', $pdf->token) }}" 
                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
                                             Descarcă
                                         </a>
@@ -136,7 +136,7 @@
             </div>
             <div class="p-6">
                 <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white">
-                    <iframe src="{{ route('pdfs.view', $currentPdf->id) }}" class="w-full h-[600px] border-0" style="background: #f8fafc;" frameborder="0"></iframe>
+                    <iframe src="{{ route('pdfs.view.token', $currentPdf->token) }}" class="w-full h-[600px] border-0" style="background: #f8fafc;" frameborder="0"></iframe>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -36,6 +37,7 @@ class StudentController extends Controller
                 'version' => $existingPdf->version + 1,
                 'parent_pdf_id' => $existingPdf->getRootPdf()->id,
                 'is_current' => true,
+                'token' => Str::random(40),
             ]);
             \Log::info('Created new PDF version', ['pdf_id' => $newVersion->id]);
         } else {
@@ -46,6 +48,7 @@ class StudentController extends Controller
                 'stored_name' => $path,
                 'version' => 1,
                 'is_current' => true,
+                'token' => Str::random(40),
             ]);
             \Log::info('Created first PDF', ['pdf_id' => $pdf->id]);
         }
@@ -219,5 +222,21 @@ class StudentController extends Controller
         $pdf->delete();
 
         return redirect()->back()->with('success', 'Versiunea PDF a fost ștearsă cu succes.');
+    }
+
+    public function downloadByToken($token)
+    {
+        $pdf = Pdf::where('token', $token)->firstOrFail();
+        return \Storage::disk('private')->download($pdf->stored_name, $pdf->original_name);
+    }
+
+    public function viewByToken($token)
+    {
+        $pdf = Pdf::where('token', $token)->firstOrFail();
+        $path = \Storage::disk('private')->path($pdf->stored_name);
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$pdf->original_name.'"'
+        ]);
     }
 } 

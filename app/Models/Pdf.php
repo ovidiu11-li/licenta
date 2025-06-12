@@ -13,6 +13,7 @@ class Pdf extends Model
         'version',
         'parent_pdf_id',
         'is_current',
+        'token',
     ];
 
     protected $casts = [
