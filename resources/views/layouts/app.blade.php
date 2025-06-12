@@ -37,7 +37,13 @@
             <button id="avatarButton"
                 @click="open = !open"
                 class="w-10 h-10 bg-yellow-300 rounded-full flex items-center justify-center font-bold text-sm text-gray-800 shadow hover:scale-105 transition focus:outline-none">
-                {{ Str::upper(Str::substr(Auth::user()->name, 0, 1)) }}{{ Str::substr(Auth::user()->name, strpos(Auth::user()->name, ' ') + 1, 1) }}
+                @php
+                    $name = Auth::user()->name;
+                    $firstInitial = mb_substr($name, 0, 1);
+                    $spacePos = mb_strpos($name, ' ');
+                    $secondInitial = $spacePos !== false ? mb_substr($name, $spacePos + 1, 1) : '';
+                    echo mb_strtoupper($firstInitial . $secondInitial);
+                @endphp
             </button>
             <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 z-50" style="display: none;" x-transition>
                 <div class="p-4 border-b border-gray-100">

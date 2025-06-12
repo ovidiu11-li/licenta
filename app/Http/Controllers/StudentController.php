@@ -239,4 +239,18 @@ class StudentController extends Controller
             'Content-Disposition' => 'inline; filename="'.$pdf->original_name.'"'
         ]);
     }
+
+    public function welcome()
+    {
+        $student = Auth::user();
+        $unreadCount = 0;
+        if ($student->teacher) {
+            $unreadCount = \App\Models\Message::where('student_id', $student->id)
+                ->where('teacher_id', $student->teacher->id)
+                ->where('sender_id', $student->teacher->id)
+                ->where('is_read', false)
+                ->count();
+        }
+        return view('student.welcome', compact('unreadCount'));
+    }
 } 
