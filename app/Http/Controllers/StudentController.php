@@ -110,8 +110,8 @@ class StudentController extends Controller
     {
         $student = Auth::user();
         $pdfs = \App\Models\Pdf::where('user_id', $student->id)
-            ->orderByDesc('version')
-            ->orderByDesc('created_at')
+            ->orderBy('version', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $unreadCount = 0;
@@ -196,6 +196,7 @@ class StudentController extends Controller
         if ($pdf->parent_pdf_id === null && $pdf->versions()->count() > 0) {
             return redirect()->back()->withErrors('Nu poți șterge prima versiune dacă există versiuni ulterioare.');
         }
+        // Dacă e root și nu are copii, permite ștergerea
 
         // Dacă ștergi versiunea curentă, setează versiunea anterioară ca is_current
         if ($pdf->is_current) {

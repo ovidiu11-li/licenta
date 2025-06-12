@@ -36,6 +36,11 @@
     </aside>
     <!-- body -->
     <main class="flex-1 max-w-6xl mx-auto mt-10 p-6">
+        @if(session('errors'))
+            <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded">
+                {{ session('errors')->first() }}
+            </div>
+        @endif
         <div x-data="pdfUploader()" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- uploadare pdf -->
             <div class="bg-white p-6 rounded-xl shadow flex flex-col gap-4">
@@ -63,7 +68,7 @@
 
                 @if($pdfs->count() > 0)
                     <div class="space-y-4">
-                        @foreach($pdfs as $pdf)
+                        @foreach($pdfs->sortBy('version') as $pdf)
                             <div class="border border-gray-200 rounded-lg p-4 {{ $pdf->is_current ? 'bg-blue-50 border-blue-200' : 'bg-gray-50' }}">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
@@ -95,7 +100,7 @@
                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
                                             Descarcă
                                         </a>
-                                        @if($pdfs->count() > 1)
+                                        
                                             <form method="POST" action="{{ route('student.pdf.delete', $pdf->id) }}" 
                                                   class="inline" 
                                                   onsubmit="return confirm('Sigur vrei să ștergi această versiune?')">
@@ -106,7 +111,7 @@
                                                     Șterge
                                                 </button>
                                             </form>
-                                        @endif
+                                        
                                     </div>
                                 </div>
                             </div>
