@@ -52,6 +52,9 @@
                 </div>
                 <form method="POST" action="{{ route('logout') }}" class="p-2">
                     @csrf
+                    <a href="{{ Auth::user()->role === 'admin' ? route('admin.welcome') : (Auth::user()->role === 'teacher' ? route('teacher.welcome') : route('student.welcome')) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium mb-1">
+                        Welcome
+                    </a>
                     <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium">
                         Ieșire din cont
                     </button>
