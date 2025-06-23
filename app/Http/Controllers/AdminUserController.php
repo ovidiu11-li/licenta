@@ -87,12 +87,4 @@ class AdminUserController extends Controller
         ]);
         return redirect()->back()->with('success', 'Studentul a fost creat cu succes.');
     }
-
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['teacher_id']);
-            $table->dropColumn('teacher_id');
-        });
-    }
 } 

@@ -38,7 +38,7 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Lucrări de Evaluat</p>
+                            <p class="text-sm font-medium text-gray-600">Lucrări total încărcate</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ \App\Models\Pdf::whereHas('user', function($query) { $query->where('teacher_id', Auth::id()); })->count() }}</p>
                         </div>
                     </div>

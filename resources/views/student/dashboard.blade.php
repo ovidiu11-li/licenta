@@ -27,12 +27,6 @@
                 </li>
             </ul>
         </nav>
-        <div class="mt-10">
-            <a href="#" class="flex items-center px-3 py-2 text-gray-500 hover:text-red-600">
-                <span class="material-icons mr-3">logout</span>
-                Ieșire din cont
-            </a>
-        </div>
     </aside>
     <!-- body -->
     <main class="flex-1 max-w-6xl mx-auto mt-10 p-6">
@@ -126,21 +120,6 @@
                 @endif
             </div>
         </div>
-
-        <!-- Previzualizare PDF -->
-        @if($currentPdf)
-        <div class="mt-6 bg-gradient-to-br from-gray-50 to-white p-0 rounded-2xl shadow-lg border border-gray-100">
-            <div class="flex items-center justify-between px-6 py-4 bg-gray-100 rounded-t-2xl border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-700">Previzualizare lucrare curentă</h2>
-                <span class="material-icons text-gray-400">picture_as_pdf</span>
-            </div>
-            <div class="p-6">
-                <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white">
-                    <iframe src="{{ route('pdfs.view.token', $currentPdf->token) }}" class="w-full h-[600px] border-0" style="background: #f8fafc;" frameborder="0"></iframe>
-                </div>
-            </div>
-        </div>
-        @endif
     </main>
 </div>
 

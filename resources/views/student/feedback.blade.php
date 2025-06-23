@@ -28,12 +28,6 @@
                 </li>
             </ul>
         </nav>
-        <div class="mt-10">
-            <a href="#" class="flex items-center px-3 py-2 text-gray-500 hover:text-red-600">
-                <span class="material-icons mr-3">logout</span>
-                Ieșire din cont
-            </a>
-        </div>
     </aside>
     <!-- body -->
     <main class="flex-1 max-w-3xl mx-auto mt-10 p-6">

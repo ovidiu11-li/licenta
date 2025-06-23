@@ -20,16 +20,16 @@ class StudentController extends Controller
         $file = $request->file('pdf');
         $path = $file->store('pdfs', 'private');
 
-        // Check if student already has a current PDF
+        // verificar daca studentul are deja un pdf curent
         $existingPdf = Pdf::where('user_id', Auth::id())
             ->where('is_current', true)
             ->first();
 
         if ($existingPdf) {
-            // Mark existing PDF as not current
+            // marcam pdf-ul curent ca fiind inactiv
             $existingPdf->update(['is_current' => false]);
             
-            // Create new version
+            // creem o noua versiune
             $newVersion = Pdf::create([
                 'user_id' => Auth::id(),
                 'original_name' => $file->getClientOriginalName(),
@@ -41,7 +41,7 @@ class StudentController extends Controller
             ]);
             \Log::info('Created new PDF version', ['pdf_id' => $newVersion->id]);
         } else {
-            // First PDF upload
+            // primul upload de pdf
             $pdf = Pdf::create([
                 'user_id' => Auth::id(),
                 'original_name' => $file->getClientOriginalName(),
@@ -56,21 +56,6 @@ class StudentController extends Controller
         return redirect()->back()->with('success', 'PDF încărcat cu succes!');
     }
 
-    public function download(\App\Models\Pdf $pdf)
-    {
-        
-        return Storage::disk('private')->download($pdf->stored_name, $pdf->original_name);
-    }
-
-    public function view(\App\Models\Pdf $pdf)
-    {
-        $path = \Storage::disk('private')->path($pdf->stored_name);
-        return response()->file($path, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$pdf->original_name.'"'
-        ]);
-    }
-
     public function teacherDashboard()
     {
         $teacher = Auth::user();
@@ -78,24 +63,12 @@ class StudentController extends Controller
             $query->where('teacher_id', $teacher->id);
         })->with(['user', 'versions'])->get();
         
-        // Group PDFs by their root PDF to show versions together
+        // gruparea pdf-urilor dupa root pdf pentru a arata versiunile impreuna
         $groupedPdfs = $pdfs->groupBy(function($pdf) {
             return $pdf->getRootPdf()->id;
         });
         
-        $unreadCount = 0;
-        if (auth()->user()->role === 'student') {
-            $student = auth()->user();
-            $teacher = $student->teacher;
-            if ($teacher) {
-                $unreadCount = \App\Models\Message::where('student_id', $student->id)
-                    ->where('teacher_id', $teacher->id)
-                    ->where('sender_id', $teacher->id)
-                    ->where('is_read', false)
-                    ->count();
-            }
-        }
-        return view('teacher.dashboard', compact('groupedPdfs', 'unreadCount'));
+        return view('teacher.dashboard', compact('groupedPdfs'));
     }
 
     public function downloadMessagePdf($pdfPath)
@@ -117,19 +90,7 @@ class StudentController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $unreadCount = 0;
-        if (auth()->user()->role === 'student') {
-            $student = auth()->user();
-            $teacher = $student->teacher;
-            if ($teacher) {
-                $unreadCount = \App\Models\Message::where('student_id', $student->id)
-                    ->where('teacher_id', $teacher->id)
-                    ->where('sender_id', $teacher->id)
-                    ->where('is_read', false)
-                    ->count();
-            }
-        }
-        return view('student.dashboard', compact('pdfs', 'unreadCount'));
+        return view('student.dashboard', compact('pdfs'));
     }
 
     // arata formularul de feedback pentru un pdf (profesor)
@@ -242,15 +203,6 @@ class StudentController extends Controller
 
     public function welcome()
     {
-        $student = Auth::user();
-        $unreadCount = 0;
-        if ($student->teacher) {
-            $unreadCount = \App\Models\Message::where('student_id', $student->id)
-                ->where('teacher_id', $student->teacher->id)
-                ->where('sender_id', $student->teacher->id)
-                ->where('is_read', false)
-                ->count();
-        }
-        return view('student.welcome', compact('unreadCount'));
+        return view('student.welcome');
     }
 } 

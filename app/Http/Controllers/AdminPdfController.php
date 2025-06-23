@@ -8,16 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminPdfController extends Controller
 {
-    public function rename(Request $request, Pdf $pdf)
-    {
-        $request->validate([
-            'new_name' => 'required|string|max:255',
-        ]);
-        $pdf->original_name = $request->input('new_name');
-        $pdf->save();
-        return redirect()->back()->with('success', 'Numele fișierului a fost actualizat.');
-    }
-
     public function delete(Pdf $pdf)
     {
         // stergerea fisierului din storage
@@ -30,7 +20,7 @@ class AdminPdfController extends Controller
     {
         $pdfs = \App\Models\Pdf::with(['user', 'versions'])->get();
         
-        // Group PDFs by their root PDF to show versions together
+        // gruparea pdf-urilor dupa root pdf pentru a arata versiunile impreuna
         $groupedPdfs = $pdfs->groupBy(function($pdf) {
             return $pdf->getRootPdf()->id;
         });

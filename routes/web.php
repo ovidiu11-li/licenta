@@ -28,7 +28,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Admin routes
+// rutele adminului
 Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/welcome', [AdminController::class, 'welcome'])->name('admin.welcome');
@@ -48,11 +48,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/students/{student}', [AdminUserController::class, 'deleteStudent'])->name('admin.students.delete');
         Route::post('/students', [AdminUserController::class, 'createStudent'])->name('admin.students.create');
         
-        Route::post('/pdf/{pdf}/rename', [AdminPdfController::class, 'rename'])->name('admin.pdf.rename');
         Route::delete('/pdf/{pdf}', [AdminPdfController::class, 'delete'])->name('admin.pdf.delete');
     });
 
-    // Teacher routes
+    // rutele profesorului
     Route::prefix('teacher')->group(function () {
         Route::get('/welcome', [TeacherController::class, 'welcome'])->name('teacher.welcome');
         Route::get('/dashboard', [StudentController::class, 'teacherDashboard'])->name('teacher.dashboard');
@@ -64,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/pdfs/{pdf}', [TeacherPdfController::class, 'destroy'])->name('teacher.pdfs.delete');
     });
 
-    // Student routes
+    // rutele studentului
     Route::prefix('student')->group(function () {
         Route::get('/welcome', [StudentController::class, 'welcome'])->name('student.welcome');
         Route::get('/dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
@@ -76,8 +75,6 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Shared PDF routes
-    Route::get('/pdfs/{pdf}', [StudentController::class, 'download'])->name('pdfs.download');
-    Route::get('/pdfs/{pdf}/view', [StudentController::class, 'view'])->name('pdfs.view');
     Route::get('/pdfs/message/{pdfPath}', [StudentController::class, 'downloadMessagePdf'])->name('pdfs.downloadMessagePdf');
     Route::get('/pdfs/token/{token}', [StudentController::class, 'downloadByToken'])->name('pdfs.download.token');
     Route::get('/pdfs/token/{token}/view', [StudentController::class, 'viewByToken'])->name('pdfs.view.token');

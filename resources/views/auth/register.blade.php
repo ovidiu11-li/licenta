@@ -17,7 +17,7 @@
                           d="M13 16h-1v-4h-1m1-4h.01M21 12A9 9 0 113 12a9 9 0 0118 0z" />
                 </svg>
                 <span>
-                    Înregistrarea este permisă doar pentru studenții UAB cu adrese de e-mail de forma: <strong>nume.complet.infoXX@uab.ro</strong> (unde XX este un număr)
+                    Înregistrarea este permisă doar pentru studenții UAB cu adrese de e-mail de forma: <strong>nume.complet.infoXX@uab.ro</strong> (unde XX este anul școlar în care sunt înscriși)
                 </span>
             </div>
 

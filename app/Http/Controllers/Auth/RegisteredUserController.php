@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
                 'email', 
                 'max:255', 
                 'unique:'.User::class,
-                new UabEmail
+                new UabEmail 
             ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -48,13 +48,13 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'student', // Set default role for new users
+            'role' => 'student', // doar studentii pot sa se inregistreze
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect('/student/dashboard');
+        return redirect('/student/welcome');
     }
 }
