@@ -15,7 +15,7 @@
                 <li>
                     <a href="{{ route('admin.students') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.students') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
                         <span class="material-icons mr-3">school</span>
-                        Administrare studenți
+                        Administrare studenții
                     </a>
                 </li>
                 <li>

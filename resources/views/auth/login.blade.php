@@ -43,10 +43,6 @@
                 <span class="text-red-500 text-sm mt-1 hidden" id="password-error">Acest câmp este obligatoriu</span>
             </div>
 
-            <div class="mb-4 text-left">
-                <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:underline">Ai uitat parola?</a>
-            </div>
-
             <div class="mb-4">
                 <button type="submit"
                         class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
