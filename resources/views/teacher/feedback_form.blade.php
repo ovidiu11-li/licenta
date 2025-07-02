@@ -18,6 +18,12 @@
                         Mesagerie
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('teacher.feedbacks') }}" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 {{ request()->routeIs('teacher.feedbacks') ? 'bg-blue-100 text-blue-700 font-semibold' : '' }}">
+                        <span class="material-icons mr-3">grading</span>
+                        Feedbackuri acordate
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>

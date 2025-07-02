@@ -15,18 +15,18 @@ class TeacherController extends Controller
     {
         $teacher = Auth::user();
         
-        // Numărul total de studenți coordonați
+        // nr total de studenti coordonati
         $studentsCount = User::where('teacher_id', $teacher->id)->count();
         
-        // Numărul total de lucrări primite
+        // nr total de lucrari primite
         $pdfsCount = Pdf::whereHas('user', function($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
         })->count();
         
-        // Numărul de feedback-uri date
+        // nr total de feedback-uri date
         $feedbacksCount = Feedback::where('teacher_id', $teacher->id)->count();
         
-        // Numărul de mesaje necitite de la studenți
+        // nr total de mesaje necitite de la studenti
         $unreadMessagesCount = Message::where('teacher_id', $teacher->id)
             ->where('sender_id', '!=', $teacher->id)
             ->where('is_read', false)
